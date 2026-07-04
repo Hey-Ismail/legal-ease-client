@@ -34,7 +34,8 @@ export default function SignUpPage() {
     const handleRegister = async (event) => {
         event.preventDefault();
 
-        if (isSubmitting) return;
+        if (isSubmitting)
+            return;
 
         setIsSubmitting(true);
 
@@ -111,7 +112,7 @@ export default function SignUpPage() {
             return;
         }
 
-        console.log(data);
+        // console.log(data);
     };
     return (
         <section className="min-h-screen bg-slate-50 flex items-center justify-center px-6 py-12">
