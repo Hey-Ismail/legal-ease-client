@@ -2,7 +2,7 @@ import { readFile } from "fs/promises";
 import path from "path";
 
 const LOCAL_LAWYERS_FILE = path.join(process.cwd(), "public/data/laywer.json");
-const LAWYERS_API_URL = process.env.LAWYERS_API_URL || "http://localhost:5000/lawyers";
+const LAWYERS_API_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 function normalizeLawyersPayload(payload) {
     if (Array.isArray(payload)) {
@@ -55,3 +55,6 @@ export async function getLawyerById(id) {
 
     return lawyers.find((lawyer) => String(lawyer._id || lawyer.id) === String(id)) || null;
 }
+
+
+//123456789Pp

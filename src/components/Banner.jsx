@@ -16,14 +16,18 @@ import {
     BriefcaseBusiness,
     MapPin,
 } from "lucide-react";
+// import { log } from "node:console";
 
 export default function Banner() {
     const [lawyers, setLawyers] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    console.log(lawyers);
+
+
     useEffect(() => {
         axios
-            .get("http://localhost:5000/lawyers")
+            .get(`${process.env.NEXT_PUBLIC_BASE_URL}/lawyers`)
             .then((res) => {
                 setLawyers(res.data.slice(0, 4));
             })
