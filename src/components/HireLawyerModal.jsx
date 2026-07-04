@@ -1,9 +1,55 @@
 "use client";
 
 import { useState } from "react";
+import { useSession } from "@/lib/auth-client";
+import { toast } from "react-toastify";
 
 export default function HireLawyerModal({ lawyer, className = "" }) {
+    const { data: session } = useSession();
     const [open, setOpen] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
+
+    const lawyerId = String(lawyer?._id || lawyer?.id || "");
+
+    async function confirmHire() {
+        if (!session?.user?.email) {
+            toast.error("Please log in to hire a lawyer.");
+            return;
+        }
+
+        try {
+            setSubmitting(true);
+
+            const response = await fetch("/api/hiring", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    userEmail: session.user.email,
+                    userName: session.user.name,
+                    lawyerId,
+                    lawyerName: lawyer?.name,
+                    lawyerEmail: lawyer?.email,
+                    lawyerSpecialization: lawyer?.specialization,
+                    fee: lawyer?.consultationFee,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data?.message || "Hiring request failed.");
+            }
+
+            toast.success("Hiring request sent!");
+            setOpen(false);
+        } catch (error) {
+            toast.error(error.message || "Hiring request failed.");
+        } finally {
+            setSubmitting(false);
+        }
+    }
 
     return (
         <>
@@ -60,13 +106,11 @@ export default function HireLawyerModal({ lawyer, className = "" }) {
                             </button>
 
                             <button
-                                onClick={() => {
-                                    alert("Hiring request sent!");
-                                    setOpen(false);
-                                }}
-                                className="rounded-xl bg-amber-500 px-5 py-3 font-semibold text-white hover:bg-amber-600"
+                                onClick={confirmHire}
+                                disabled={submitting}
+                                className="rounded-xl bg-amber-500 px-5 py-3 font-semibold text-white hover:bg-amber-600 disabled:cursor-not-allowed disabled:opacity-60"
                             >
-                                Confirm
+                                {submitting ? "Sending..." : "Confirm"}
                             </button>
 
                         </div>

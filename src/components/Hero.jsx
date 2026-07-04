@@ -44,7 +44,7 @@ export default function Hero() {
                     className="mt-10"
                 >
                     <Link
-                        href="/browse-lawyers"
+                        href="/lawyers"
                         className="bg-primary text-white px-8 py-4 rounded-xl font-semibold hover:scale-105 duration-300"
                     >
                         Browse Lawyers

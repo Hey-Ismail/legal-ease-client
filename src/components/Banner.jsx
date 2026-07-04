@@ -40,7 +40,7 @@ export default function Banner() {
     }
 
     return (
-        <section className="bg-slate-900">
+        <section className="bg-linear-to-b from-slate-900 to-slate-800">
             <Swiper
                 modules={[Autoplay, Pagination]}
                 autoplay={{
@@ -67,7 +67,7 @@ export default function Banner() {
 
                                 <div className="flex gap-4 mt-8">
                                     <Link
-                                        href="/browse-lawyers"
+                                        href="/lawyers"
                                         className="bg-amber-500 hover:bg-amber-400 text-slate-900 px-6 py-3.5 rounded-lg font-semibold inline-flex items-center gap-2 transition-colors"
                                     >
                                         Browse lawyers

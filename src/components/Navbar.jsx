@@ -3,19 +3,62 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { useSession, signOut } from "@/lib/auth-client";
 
+import ThemeToggle from "./ThemeToggle";
 import {
     Menu,
     X,
     Search,
     Scale,
     ChevronDown,
+    User,
+    LogOut,
 } from "lucide-react";
+
+function normalizeRole(role) {
+    if (!role) return "user";
+
+    const normalized = String(role).toLowerCase();
+
+    if (normalized === "lawyer") return "lawyer";
+    if (normalized === "admin") return "admin";
+
+    return "user";
+}
+
+function getDashboardHref(role) {
+    if (role === "lawyer") return "/dashboard/lawyer/hiring-history";
+    if (role === "admin") return "/dashboard/admin/analytics";
+
+    return "/dashboard/user/hiring-history";
+}
+
+function getDashboardLabel(role) {
+    if (role === "lawyer") return "Lawyer Dashboard";
+    if (role === "admin") return "Admin Dashboard";
+
+    return "User Dashboard";
+}
 
 export default function Navbar() {
     const pathname = usePathname();
+    const { data: session } = useSession();
 
     const [open, setOpen] = useState(false);
+    const [profileOpen, setProfileOpen] = useState(false);
+
+    const isLoggedIn = Boolean(session?.user);
+    const role = normalizeRole(session?.user?.role);
+    const dashboardHref = getDashboardHref(role);
+    const dashboardLabel = getDashboardLabel(role);
+    const displayName = session?.user?.name || session?.user?.email || "Profile";
+
+    const handleLogout = async () => {
+        await signOut();
+        setProfileOpen(false);
+        setOpen(false);
+    };
 
     const navLinks = [
         {
@@ -24,7 +67,44 @@ export default function Navbar() {
         },
         {
             name: "Browse Lawyers",
-            href: "/src/app/lawyers",
+            href: "/lawyers",
+        },
+    ];
+
+    const dashboardLinks = role === "admin" ? [
+        {
+            name: "Analytics",
+            href: "/dashboard/admin/analytics",
+        },
+        {
+            name: "Users",
+            href: "/dashboard/admin/manage-users",
+        },
+        {
+            name: "Transactions",
+            href: "/dashboard/admin/all-transactions",
+        },
+    ] : role === "lawyer" ? [
+        {
+            name: "Hiring Requests",
+            href: "/dashboard/lawyer/hiring-history",
+        },
+        {
+            name: "Manage Profile",
+            href: "/dashboard/lawyer/manage-legal-profile",
+        },
+    ] : [
+        {
+            name: "Hiring History",
+            href: "/dashboard/user/hiring-history",
+        },
+        {
+            name: "Update Profile",
+            href: "/dashboard/user/update-profile",
+        },
+        {
+            name: "Comments",
+            href: "/dashboard/user/comments",
         },
     ];
 
@@ -72,44 +152,17 @@ export default function Navbar() {
                             </Link>
                         ))}
 
-                        {/* Dashboard */}
-
-                        <div className="relative group cursor-pointer">
-
-                            <button className="flex items-center gap-1 text-gray-300 hover:text-yellow-500">
-
-                                Dashboard
-
-                                <ChevronDown size={18} />
-
-                            </button>
-
-                            <div className="absolute top-10 hidden group-hover:block bg-slate-900 rounded-xl shadow-xl w-56 border border-slate-700 overflow-hidden">
-
-                                <Link
-                                    href="/dashboard/profile"
-                                    className="block px-5 py-3 hover:bg-slate-800 text-gray-300"
-                                >
-                                    Profile
-                                </Link>
-
-                                <Link
-                                    href="/dashboard/history"
-                                    className="block px-5 py-3 hover:bg-slate-800 text-gray-300"
-                                >
-                                    Hiring History
-                                </Link>
-
-                                <Link
-                                    href="/dashboard/comments"
-                                    className="block px-5 py-3 hover:bg-slate-800 text-gray-300"
-                                >
-                                    Comments
-                                </Link>
-
-                            </div>
-
-                        </div>
+                        {isLoggedIn && (
+                            <Link
+                                href={dashboardHref}
+                                className={`transition font-semibold ${pathname.startsWith("/dashboard")
+                                    ? "text-yellow-500"
+                                    : "text-gray-300 hover:text-yellow-500"
+                                    }`}
+                            >
+                                {dashboardLabel}
+                            </Link>
+                        )}
 
                     </div>
 
@@ -137,21 +190,58 @@ export default function Navbar() {
                     {/* Right Side */}
 
                     <div className="hidden lg:flex items-center gap-4">
+                        {isLoggedIn ? (
+                            <div className="relative">
+                                <button
+                                    type="button"
+                                    onClick={() => setProfileOpen((prev) => !prev)}
+                                    className="flex items-center gap-2 rounded-full border border-slate-700 px-4 py-2 text-gray-200 hover:border-yellow-500 hover:text-yellow-500 transition"
+                                >
+                                    <User size={18} />
+                                    <span className="max-w-40 truncate">{displayName}</span>
+                                    <ChevronDown size={16} />
+                                </button>
 
-                        <Link
-                            href="/login"
-                            className="text-gray-300 hover:text-yellow-500 transition"
-                        >
-                            Login
-                        </Link>
+                                {profileOpen && (
+                                    <div className="absolute right-0 top-12 bg-slate-900 rounded-xl shadow-xl w-56 border border-slate-700 overflow-hidden">
+                                        {/* <Link
+                                            href="/dashboard/profile"
+                                            className="block px-5 py-3 hover:bg-slate-800 text-gray-300"
+                                            onClick={() => setProfileOpen(false)}
+                                        >
+                                            My Profile
+                                        </Link> */}
 
-                        <Link
-                            href="/register"
-                            className="bg-yellow-500 hover:bg-yellow-400 text-slate-900 px-6 py-3 rounded-full font-semibold transition"
-                        >
-                            Register
-                        </Link>
+                                        <button
+                                            type="button"
+                                            onClick={handleLogout}
+                                            className="w-full text-left px-5 py-3 hover:bg-slate-800 text-red-400 flex items-center gap-2"
+                                        >
+                                            <LogOut size={16} />
+                                            Logout
+                                        </button>
+                                    </div>
+                                )}
 
+                            </div>
+                        ) : (
+                            <>
+                                <Link
+                                    href="/auth/signin"
+                                    className="text-gray-300 hover:text-yellow-500 transition"
+                                >
+                                    Login
+                                </Link>
+
+                                <Link
+                                    href="/auth/signup"
+                                    className="bg-yellow-500 hover:bg-yellow-400 text-slate-900 px-6 py-3 rounded-full font-semibold transition"
+                                >
+                                    Register
+                                </Link>
+                            </>
+                        )}
+                        <ThemeToggle />
                     </div>
 
                     {/* Mobile Button */}
@@ -188,20 +278,50 @@ export default function Navbar() {
                             </Link>
                         ))}
 
-                        <Link href="/dashboard">
+                        <Link href="/dashboard" onClick={() => setOpen(false)}>
                             Dashboard
                         </Link>
 
-                        <Link href="/login">
-                            Login
-                        </Link>
+                        {isLoggedIn ? (
+                            <>
+                                <Link href={dashboardHref} onClick={() => setOpen(false)}>
+                                    {dashboardLabel}
+                                </Link>
 
-                        <Link
-                            href="/register"
-                            className="bg-yellow-500 text-slate-900 rounded-lg py-3 text-center font-semibold"
-                        >
-                            Register
-                        </Link>
+                                {dashboardLinks.map((item) => (
+                                    <Link
+                                        key={item.href}
+                                        href={item.href}
+                                        onClick={() => setOpen(false)}
+                                        className={pathname === item.href ? "text-yellow-500" : ""}
+                                    >
+                                        {item.name}
+                                    </Link>
+                                ))}
+
+                                <button
+                                    type="button"
+                                    onClick={handleLogout}
+                                    className="text-left text-red-400"
+                                >
+                                    Logout
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <Link href="/auth/signin" onClick={() => setOpen(false)}>
+                                    Login
+                                </Link>
+
+                                <Link
+                                    href="/auth/signup"
+                                    onClick={() => setOpen(false)}
+                                    className="bg-yellow-500 text-slate-900 rounded-lg py-3 text-center font-semibold"
+                                >
+                                    Register
+                                </Link>
+                            </>
+                        )}
 
                         {/* Mobile Search */}
 
