@@ -31,7 +31,13 @@ async function readLocalLawyers() {
 }
 
 async function fetchRemoteLawyers() {
-    const response = await fetch(LAWYERS_API_URL, {
+    const url = LAWYERS_API_URL ? `${LAWYERS_API_URL}/lawyers` : null;
+
+    if (!url) {
+        throw new Error("NEXT_PUBLIC_BASE_URL is not configured");
+    }
+
+    const response = await fetch(url, {
         cache: "no-store",
     });
 

@@ -22,7 +22,7 @@ export default function Banner() {
     const [lawyers, setLawyers] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    console.log(lawyers);
+
 
 
     useEffect(() => {

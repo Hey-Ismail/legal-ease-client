@@ -1,8 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
 async function getTopLawyers() {
-    const res = await fetch(`http://localhost:5000/TopLawyerExperts`, {
+    const res = await fetch(`${BASE_URL}/TopLawyerExperts`, {
         cache: "no-store",
     });
 
@@ -14,7 +16,18 @@ async function getTopLawyers() {
 }
 
 export default async function TopLawyerExperts() {
-    const lawyers = await getTopLawyers();
+    let lawyers = [];
+
+    try {
+        lawyers = await getTopLawyers();
+    } catch (error) {
+        console.error("TopLawyerExperts fetch failed:", error?.message);
+        return null;
+    }
+
+    if (!lawyers || lawyers.length === 0) {
+        return null;
+    }
 
     return (
         <section className="bg-slate-50 py-20">

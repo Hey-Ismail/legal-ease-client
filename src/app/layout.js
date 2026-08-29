@@ -1,9 +1,10 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+// import Providers from "./Providers";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ToastProvider from "@/components/provider/ToastProvider";
-import Providers from "@/components/provider/ThemeProvider";
+// import Providers from "@/components/provider/ThemeProvider";
 
 
 const geistSans = Geist({
@@ -29,14 +30,14 @@ export default function RootLayout({ children }) {
       suppressHydrationWarning>
       <body className="min-h-full flex flex-col bg-slate-50 text-slate-900">
 
-        <Providers>
-          <ToastProvider />
-          <Navbar />
-          <main className="flex-1">
-            {children}
-          </main>
-          <Footer />
-        </Providers>
+        {/* <Providers> */}
+        <ToastProvider />
+        <Navbar />
+        <main className="flex-1">
+          {children}
+        </main>
+        <Footer />
+        {/* </Providers> */}
 
       </body>
     </html>
