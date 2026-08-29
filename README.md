@@ -13,7 +13,7 @@ LegalEase helps clients find and hire lawyers for various legal matters. The pla
 - **Google Sign-in**: Available (shows info message if unavailable)
 - **Responsive design**: Works on mobile, tablet, and desktop
 - **Dark/Light mode**: Toggle in the navbar
-- **Dashboard views**: 
+- **Dashboard views**:
   - Users: Hiring history, profile, comments
   - Lawyers: Hiring requests, profile management
   - Admins: Analytics, user management, transactions
@@ -27,42 +27,19 @@ LegalEase helps clients find and hire lawyers for various legal matters. The pla
 - **Lucide-react** for icons
 - **next-themes** for dark/light mode
 
-## 🌐 Live Demo
-
-**Replace the URL below with your actual live deployment:**
-- [Live Demo](https://legal-ease-client.vercel.app) - Vercel deployment
-
-## 📁 Project Structure
-
-```
-src/
-├── app/           # Next.js App Router pages
-│   ├── auth/      # Login & Signup pages
-│   └── layout.js  # Root layout with Navbar
-├── components/    # Reusable UI components
-│   ├── Navbar.jsx # Navigation with ThemeToggle & Logout
-│   └── GoogleSignin.jsx # Google button
-├── lib/           # Utility files (auth config, lawyers data)
-└── styles/        # CSS/TAILWIND styles
-```
-
 ## 🔐 Authentication Notes
 
-- **Google Login**: Clicking "Continue with Google" shows an info message: *"Google sign-in is currently unavailable. Please sign up with email and password instead."*
+- **Google Login**: Clicking "Continue with Google" shows an info message: _"Google sign-in is currently unavailable. Please sign up with email and password instead."_
 - **Logout**: Users are redirected to homepage after signing out
 - **Signup**: Admin role removed - new users can only register as "User (Client)" or "Lawyer"
-- **Default Admin**: `admin@legalease.com` / `Admin@123` (configurable via env vars)
 
 ## 🎨 Design Customization
 
-- **Theme toggle**: Click the moon/sun icon in the navbar to switch between dark and light mode
 - **Colors**: Primary accent is amber-500, slate gray palette
 - **Responsive**: Mobile-first design with hamburger menu
 
 ## 📦 Deployment
 
-Easily deploy to [Vercel](https://vercel.com) from the dashboard. The app is configured for seamless Vercel deployment.
+live link : https://legal-ease-client-amber.vercel.app/
 
----
-
-*Built with ❤️ using Next.js and Better-Auth*
+<!-- _Built with ❤️ using Next.js and Better-Auth_ -->
