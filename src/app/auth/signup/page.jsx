@@ -7,9 +7,6 @@ import { Scale } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "react-toastify";
 
-const FIXED_ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL || "admin@legalease.com";
-const FIXED_ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "Admin@123";
-
 export default function SignUpPage() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [form, setForm] = useState({
@@ -101,19 +98,10 @@ export default function SignUpPage() {
     };
 
     const handleGoogleSignUp = async () => {
-
-        const { data, error } = await authClient.signIn.social({
-            provider: "google",
-            callbackURL: "/",
-        });
-
-        if (error) {
-            toast.error(error.message);
-            return;
-        }
-
-        // console.log(data);
+        toast.info("Google sign-in is currently unavailable. Please sign up with email and password instead.");
     };
+
+
     return (
         <section className="min-h-screen bg-slate-50 flex items-center justify-center px-6 py-12">
 
@@ -173,11 +161,6 @@ export default function SignUpPage() {
                             placeholder="Enter your email"
                             className="w-full mt-2 border border-slate-300 rounded-xl px-4 py-3 outline-none focus:border-amber-500"
                         />
-                        {form.role === "admin" && (
-                            <p className="mt-2 text-xs text-slate-500">
-                                Admin credentials must match the approved admin account.
-                            </p>
-                        )}
 
                     </div>
 
@@ -196,11 +179,6 @@ export default function SignUpPage() {
                             placeholder="Enter your password"
                             className="w-full mt-2 border border-slate-300 rounded-xl px-4 py-3 outline-none focus:border-amber-500"
                         />
-                        {form.role === "admin" && (
-                            <p className="mt-2 text-xs text-slate-500">
-                                Enter the approved admin password manually.
-                            </p>
-                        )}
 
                     </div>
 
@@ -240,10 +218,6 @@ export default function SignUpPage() {
 
                             <option value="lawyer">
                                 Lawyer
-                            </option>
-
-                            <option value="admin">
-                                Admin
                             </option>
 
                         </select>

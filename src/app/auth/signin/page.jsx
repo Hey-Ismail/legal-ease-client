@@ -67,15 +67,10 @@ export default function SignInPage() {
     }
 
     async function handleGoogleLogin() {
-        try {
-            await authClient.signIn.social({
-                provider: "google",
-                callbackURL: "/",
-            });
-        } catch (err) {
-            toast.error("Google login failed.");
-        }
+        toast.info("Google sign-in is currently unavailable. Please sign up with email and password instead.");
     }
+
+
 
     return (
         <section className="min-h-screen bg-slate-50 flex items-center justify-center px-5">
