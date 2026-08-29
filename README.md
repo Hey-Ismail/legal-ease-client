@@ -27,38 +27,10 @@ LegalEase helps clients find and hire lawyers for various legal matters. The pla
 - **Lucide-react** for icons
 - **next-themes** for dark/light mode
 
-## 🚀 Getting Started
+## 🌐 Live Demo
 
-1. **Install dependencies:**
-   ```bash
-   npm install
-   # or
-   yarn install
-   ```
-
-2. **Set up environment variables:**
-   Copy `.env.example` to `.env` and add your:
-   - `NEXT_PUBLIC_ADMIN_EMAIL` (default: `admin@legalease.com`)
-   - `NEXT_PUBLIC_ADMIN_PASSWORD` (default: `Admin@123`)
-   - Google OAuth credentials if needed
-
-3. **Run the development server:**
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   ```
-
-4. **Open [http://localhost:3000](http://localhost:3000)** in your browser.
-
-## 📦 Available Scripts
-
-| Script | Description |
-|--------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm run lint` | Run ESLint |
-| `npm run lint:fix` | Fix ESLint issues |
+**Replace the URL below with your actual live deployment:**
+- [Live Demo](https://legal-ease-client.vercel.app) - Vercel deployment
 
 ## 📁 Project Structure
 
